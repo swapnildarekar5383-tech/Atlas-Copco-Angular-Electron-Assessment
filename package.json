@@ -1,0 +1,38 @@
+{
+  "name": "atlas-copco-telemetry-monitor",
+  "version": "1.0.0",
+  "description": "Atlas Copco Angular + Electron Technical Assessment",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "ng serve",
+    "electron": "concurrently -k \"ng serve --port 4200\" \"wait-on http://localhost:4200 && electron .\"",
+    "build": "ng build",
+    "electron:build": "npm run build && electron .",
+    "test": "ng test --watch=false",
+    "lint": "ng lint"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^20.3.0",
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/platform-browser-dynamic": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "chart.js": "^4.5.0",
+    "xlsx": "^0.18.5",
+    "rxjs": "^7.8.2",
+    "zone.js": "^0.15.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^20.3.0",
+    "@angular/cli": "^20.3.0",
+    "@angular/compiler-cli": "^20.3.0",
+    "concurrently": "^9.2.1",
+    "electron": "^38.2.2",
+    "typescript": "~5.9.2",
+    "wait-on": "^9.0.1"
+  }
+}

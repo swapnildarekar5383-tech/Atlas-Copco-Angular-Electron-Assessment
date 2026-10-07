@@ -1,0 +1,114 @@
+<div class="app-shell">
+  <header>
+    <div class="brand">
+      <div class="logo">AC</div>
+      <div><strong>ATLAS COPCO</strong><span>Telemetry Monitor</span></div>
+    </div>
+    <div class="header-actions">
+      <span class="connection"
+        ><i [class.offline]="!telemetry.connected()"></i
+        >{{ telemetry.connected() ? "Connected" : "Disconnected" }}</span
+      ><button (click)="toggleTheme()">
+        {{ dark() ? "☀" : "☾" }} {{ dark() ? "Light" : "Dark" }}</button
+      ><button (click)="exportCsv()">CSV</button
+      ><button (click)="exportExcel()">Excel</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">EMBEDDED CONTROLLER</p>
+        <h1>Live Monitoring Dashboard</h1>
+        <p class="muted">
+          Real-time telemetry with historical trends and on-device unit
+          conversion.
+        </p>
+      </div>
+      <div class="updated">
+        <span>Last successful update</span
+        ><strong>{{
+          telemetry.lastSuccess()
+            ? (telemetry.lastSuccess() | date: "mediumTime")
+            : "—"
+        }}</strong>
+      </div>
+    </section>
+    <div *ngIf="telemetry.loading()" class="state">Loading telemetry…</div>
+    <div *ngIf="telemetry.error()" class="error">{{ telemetry.error() }}</div>
+    <section class="cards">
+      <article class="card" *ngFor="let c of configs">
+        <div class="card-head">
+          <div>
+            <span class="metric-icon">{{ c.icon }}</span
+            ><span class="metric-label">{{ c.label }}</span>
+          </div>
+          <span
+            class="status"
+            [class.warning]="status(c) === 'Warning'"
+            [class.critical]="status(c) === 'Critical'"
+            >{{ status(c) }}</span
+          >
+        </div>
+        <div class="gauge-wrap">
+          <div class="gauge" [style.background]="gauge(c)">
+            <div class="gauge-inner">
+              <strong>{{ converted(c) | number: "1.0-2" }}</strong
+              ><span>{{ selectedUnits[c.key] }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <div>
+            <small>UNIT</small
+            ><select
+              [value]="selectedUnits[c.key]"
+              (change)="setUnit(c.key, $event)"
+            >
+              <option *ngFor="let u of unitOptions[c.key]" [value]="u">
+                {{ u }}
+              </option>
+            </select>
+          </div>
+          <div class="now">
+            <small>UPDATED</small
+            ><b
+              >{{ metric(c)?.value | number: "1.0-2" }} {{ metric(c)?.unit }}</b
+            >
+          </div>
+        </div>
+        <div class="chart">
+          <div class="chart-title">
+            <span>Live trend</span
+            ><span>{{ history(c).length }} / 100 samples</span>
+          </div>
+          <div class="chart-tools">
+            <button (click)="zoomOut(c)" title="Zoom out">−</button
+            ><button (click)="zoomIn(c)" title="Zoom in">+</button
+            ><button (click)="pan(c, -1)" title="Pan left">←</button
+            ><button (click)="pan(c, 1)" title="Pan right">→</button>
+          </div>
+          <svg viewBox="0 0 600 180" preserveAspectRatio="none">
+            <polyline
+              [attr.points]="chartPoints(c)"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              vector-effect="non-scaling-stroke"
+            />
+            <g *ngFor="let p of history(c); let i = index">
+              <title>
+                {{ p.time }} • {{ p.value | number: "1.0-2" }}
+                {{ selectedUnits[c.key] }}
+              </title>
+            </g>
+          </svg>
+          <div class="axis"><span>Oldest</span><span>Now</span></div>
+        </div>
+      </article>
+    </section>
+  </main>
+  <footer>
+    <span>Atlas Copco Technical Assessment</span
+    ><span>Angular + Electron • Live telemetry</span>
+  </footer>
+</div>

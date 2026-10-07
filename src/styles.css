@@ -1,0 +1,37 @@
+:root {
+  --bg: #08111f;
+  --panel: #0e1a2b;
+  --text: #eef4fb;
+  --muted: #8492a6;
+  --border: #203047;
+  --accent: #69d2ff;
+  --track: #1b2b40;
+  font-family:
+    Inter,
+    Segoe UI,
+    Arial,
+    sans-serif;
+}
+html.light {
+  --bg: #f3f6fa;
+  --panel: #fff;
+  --text: #162235;
+  --muted: #66758a;
+  --border: #dbe3ec;
+  --accent: #087ea4;
+  --track: #dce6ef;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  transition:
+    background 0.25s,
+    color 0.25s;
+}
+button,
+select {
+  font: inherit;
+}
